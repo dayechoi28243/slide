@@ -111,14 +111,17 @@
       next = xStart - xEnd > 0;
       prev = xStart - xEnd < 0;
 
-      container.style.transform = `translateX(-${xEnd}px)`;
-
+      if (index < 2) {
+        container.style.transform = `translateX(-${xEnd}px)`;
+      } else if (index > 0){
+        container.style.transform = `translateX(${xEnd}px)`;
+      }
     }
 
     function touchEndHandler(e) {
-      console.log(next)
-      console.log(prev)
-      if (next && index < 2) {
+      console.log(next);
+      console.log(prev);
+      if (next && index < 2 && xEnd) {
         index++;
         container.style.transform = `translateX(-${index * 200}px)`;
       }
@@ -129,7 +132,7 @@
       console.log(index);
       indis[prevIndex].classList.remove("active");
       indis[index].classList.add("active");
-
+      xEnd = 0;
       prevIndex = index;
     }
   </script>
