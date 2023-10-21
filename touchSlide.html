@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        padding: 0.5rem;
+        width: 100vw;
+        overflow-x: hidden;
+        box-sizing: border-box;
+      }
+
+      #frame {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      #container {
+        display: flex;
+        width: 600px;
+        transition: transform 0.2s;
+      }
+
+      .image {
+        width: 200px;
+        height: 200px;
+        font-size: 2rem;
+        background-image: linear-gradient(to right, #333, #222);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+      }
+
+      .indicator {
+        position: absolute;
+        bottom: 12px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+      }
+      .dot {
+        display: block;
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 99px;
+        margin: 0.2px;
+        opacity: 0.5;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .active {
+        opacity: 1;
+      }
+    </style>
+
+    <div id="frame">
+      <div id="container">
+        <div class="image">1</div>
+        <div class="image">2</div>
+        <div class="image">3</div>
+      </div>
+
+      <div class="indicator">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </body>
+  <script>
+    var frame = document.getElementById("frame");
+    var images = document.getElementsByClassName("image");
+    var indis = document.getElementsByClassName("dot");
+    var container = document.getElementById("container");
+    var index = 0;
+    var prevIndex = 0;
+    var xStart, xEnd;
+    var next, prev;
+
+    function prevNext() {}
+
+    frame.addEventListener("touchstart", touchStartHandler);
+    frame.addEventListener("touchmove", touchMoveHandler);
+    frame.addEventListener("touchend", touchEndHandler);
+
+    function touchStartHandler(e) {
+      xStart = e.touches[0].clientX;
+      console.log("터치시작:", e.touches[0].clientX);
+    }
+
+    function touchMoveHandler(e) {
+      xEnd = e.touches[0].clientX;
+      console.log("터치중:", e.touches[0].clientX);
+      next = xStart - xEnd > 0;
+      prev = xStart - xEnd < 0;
+
+      container.style.transform = `translateX(-${xEnd}px)`;
+
+    }
+
+    function touchEndHandler(e) {
+      console.log(next)
+      console.log(prev)
+      if (next && index < 2) {
+        index++;
+        container.style.transform = `translateX(-${index * 200}px)`;
+      }
+      if (prev && index > 0) {
+        index--;
+        container.style.transform = `translateX(-${index * 200}px)`;
+      }
+      console.log(index);
+      indis[prevIndex].classList.remove("active");
+      indis[index].classList.add("active");
+
+      prevIndex = index;
+    }
+  </script>
+</html>
