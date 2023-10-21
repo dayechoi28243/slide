@@ -91,10 +91,7 @@
     var container = document.getElementById("container");
     var index = 0;
     var prevIndex = 0;
-    var xStart, xEnd;
-    var next, prev;
-
-    function prevNext() {}
+    var xStart, xEnd, next, prev;
 
     frame.addEventListener("touchstart", touchStartHandler);
     frame.addEventListener("touchmove", touchMoveHandler);
@@ -111,28 +108,30 @@
       next = xStart - xEnd > 0;
       prev = xStart - xEnd < 0;
 
-      if (index < 2) {
-        container.style.transform = `translateX(-${xEnd}px)`;
-      } else if (index > 0){
-        container.style.transform = `translateX(${xEnd}px)`;
+      if (index < 2 && next) {
+        container.style.transform = `translateX(-${index * 200 + xEnd}px)`;
+      }
+      if (index > 0 && prev) {
+        container.style.transform = `translateX(-${index * 200 - xEnd}px)`;
       }
     }
 
     function touchEndHandler(e) {
-      console.log(next);
-      console.log(prev);
-      if (next && index < 2 && xEnd) {
+      var move = xStart - xEnd;
+
+      if (next && index < 2 && move > 50) {
         index++;
         container.style.transform = `translateX(-${index * 200}px)`;
-      }
-      if (prev && index > 0) {
+      } else if (prev && index > 0 && move < -50) {
         index--;
         container.style.transform = `translateX(-${index * 200}px)`;
+      } else {
+        container.style.transform = `translateX(-${index * 200}px)`;
+        return
       }
-      console.log(index);
+
       indis[prevIndex].classList.remove("active");
       indis[index].classList.add("active");
-      xEnd = 0;
       prevIndex = index;
     }
   </script>
